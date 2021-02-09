@@ -1,15 +1,17 @@
-# SIM808
-[![Build Status](https://travis-ci.org/blemasle/arduino-sim808.svg?branch=master)](https://travis-ci.org/blemasle/arduino-sim808)
-[![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
+# SIM8xx
+
+This is a fork of the original SIM808 library for Arduino.
+It was modified to work with the BK-SIM808 module along with another modules of the Sim8xx series.
+There were added some functions to retrieve information from the SIM module like the internal clock and simple battery status.
+There were added some delays to make the circuit more energy spikeless.
+
+# --------
 
 This library allows to access some of the features of the [SIM808](https://simcom.ee/documents/?dir=SIM808) GPS & GPRS module. It requires only the `RESET` pin to work and a TTL Serial. `STATUS` pin can be wired to enhance the module power status detection, while wiring the `PWRKEY` adds the ability to turn the module on & off.
 
 The library tries to reduces memory consumption as much as possible, but nonetheless use a 64 bytes buffer to communicate with the SIM808 module. When available, SIM808 responses are parsed to ensure that commands are correctly executed by the module. Commands timeouts are also set according to SIMCOM documentation.  
 
 > No default instance is created when the library is included
-
-[Arduino-Log](https://github.com/thijse/Arduino-Log) is used to output formatted commands in a `printf` style. This make implementation of new commands
-really easy, and avoid successive prints or string concatenation on complex commands.
 
 ## Features
  * Fine control over the module power management
@@ -33,7 +35,7 @@ It does *not* have the pretention to become the new SIM808 standard library, but
  No default instance is created when the library is included. It's up to you to create one with the appropriate parameters.
 
  ```cpp
-#include <SIM808.h>
+#include <SIM8xx.h>
 #include <SoftwareSerial.h>
 
 #define SIM_RST		5	///< SIM808 RESET
@@ -42,19 +44,19 @@ It does *not* have the pretention to become the new SIM808 standard library, but
 #define SIM_PWR		9	///< SIM808 PWRKEY
 #define SIM_STATUS	8	///< SIM808 STATUS
 
-#define SIM808_BAUDRATE 4800    ///< Control the baudrate use to communicate with the SIM808 module
+#define SIM8xx_BAUDRATE 4800    ///< Control the baudrate use to communicate with the SIM808 module
 
 SoftwareSerial simSerial = SoftwareSerial(SIM_TX, SIM_RX);
-SIM808 sim808 = SIM808(SIM_RST, SIM_PWR, SIM_STATUS);
-// SIM808 sim808 = SIM808(SIM_RST); // if you only have the RESET pin wired
-// SIM808 sim808 = SIM808(SIM_RST, SIM_PWR); // if you only have the RESET and PWRKEY pins wired
+SIM8xx SIM8xx = SIM8xx(SIM_RST, SIM_PWR, SIM_STATUS);
+// SIM8xx sim = SIM8xx(SIM_RST); // if you only have the RESET pin wired
+// SIM8xx sim = SIM8xx(SIM_RST, SIM_PWR); // if you only have the RESET and PWRKEY pins wired
 
 void setup() {
-    simSerial.begin(SIM808_BAUDRATE);
-    sim808.begin(simSerial);
+    simSerial.begin(SIM8xx_BAUDRATE);
+    sim.begin(simSerial);
 
-    sim808.powerOnOff(true);    //power on the SIM808. Unavailable without the PWRKEY pin wired
-    sim808.init();
+    sim.powerOnOff(true);    //power on the SIM808. Unavailable without the PWRKEY pin wired
+    sim.init();
 }
 
 void loop() {
@@ -62,8 +64,3 @@ void loop() {
 }
  ```
 See examples for further usage.
-
-## A note about HTTPS
-
-While technically, SIM808 module support HTTPS requests through the HTTP service, it is particularly unreliable and sketchy. 7 times out of 10, the request won't succeed.  
-In the future, I hope to find the time to make HTTPS work with the TCP service. In the meantime I strongly (and sadly) recommend to stick with HTTP requests if you need reliability.

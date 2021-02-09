@@ -5,9 +5,9 @@ void SIMComAT::begin(Stream& port)
 {
 	_port = &port;
 	_output.begin(LOG_LEVEL_VERBOSE, this, false);
-#if _SIM808_DEBUG
+#if _SIM8xx_DEBUG
 	_debug.begin(LOG_LEVEL_VERBOSE, &Serial, false);
-#endif // _SIM808_DEBUG
+#endif // _SIM8xx_DEBUG
 }
 
 void SIMComAT::flushInput() {
@@ -45,7 +45,7 @@ size_t SIMComAT::readNext(char * buffer, size_t size, uint16_t * timeout, char s
 
 	if(i) {
 		RECEIVEARROW;
-		SIM808_PRINT(buffer);
+		SIM8xx_PRINT(buffer);
 	}
 
 	return i > 0 ? i - 1 : i;

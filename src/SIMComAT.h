@@ -4,21 +4,21 @@
 #include <ArduinoLog.h>
 #include "SIMComAT.Common.h"
 
-#define _SIM808_DEBUG _DEBUG
+#define _SIM8xx_DEBUG 1
 
-#if _SIM808_DEBUG
-	#define SIM808_PRINT(...) _debug.verbose(__VA_ARGS__)
-	#define SIM808_PRINT_CHAR(x) Serial.print((char)x)
-	#define SIM808_PRINT_P(fmt, ...) _debug.verbose(S_F(fmt "\n"), __VA_ARGS__)
-	#define SIM808_PRINT_SIMPLE_P(fmt) _debug.verbose(S_F(fmt "\n"))
+#if _SIM8xx_DEBUG
+	#define SIM8xx_PRINT(...) _debug.verbose(__VA_ARGS__)
+	#define SIM8xx_PRINT_CHAR(x) Serial.print((char)x)
+	#define SIM8xx_PRINT_P(fmt, ...) _debug.verbose(S_F(fmt "\n"), __VA_ARGS__)
+	#define SIM8xx_PRINT_SIMPLE_P(fmt) _debug.verbose(S_F(fmt "\n"))
 
 	#define RECEIVEARROW _debug.verbose(S_F("<--"))
 	#define SENDARROW _debug.verbose(S_F("\n-->"))
 #else
-	#define SIM808_PRINT(...)
-	#define SIM808_PRINT_CHAR(x)
-	#define SIM808_PRINT_P(x, ...)
-	#define SIM808_PRINT_SIMPLE_P(x)
+	#define SIM8xx_PRINT(...)
+	#define SIM8xx_PRINT_CHAR(x)
+	#define SIM8xx_PRINT_P(x, ...)
+	#define SIM8xx_PRINT_SIMPLE_P(x)
 	
 	#define RECEIVEARROW 
 	#define SENDARROW
@@ -38,7 +38,7 @@ private:
 protected:
 	Stream* _port;
 	Logging _output;
-#if _SIM808_DEBUG
+#if _SIM8xx_DEBUG
 	Logging _debug;
 #endif
 
@@ -170,7 +170,7 @@ public:
 #pragma region Stream implementation
 
 	int available() { return _port->available(); }
-	size_t write(uint8_t x) { SIM808_PRINT_CHAR(x); return _port->write(x); }
+	size_t write(uint8_t x) { SIM8xx_PRINT_CHAR(x); return _port->write(x); }
 	int read() { return _port->read(); }
 	int peek() { return _port->peek(); }
 	void flush() { return _port->flush(); }
