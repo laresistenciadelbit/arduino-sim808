@@ -36,13 +36,27 @@ bool SIM8xx::getGprsPowerState(bool *state)
 	return true;
 }
 
+bool SIM8xx::getGprsPowerState()
+{
+	uint8_t result;
+
+	sendAT(TO_F(TOKEN_CGATT), TO_F(TOKEN_READ));
+
+	if(waitResponse(10000L, TO_F(TOKEN_CGATT)) != 0 ||
+		!parseReply(',', 0, &result) ||
+		waitResponse())
+		return false;
+
+	return result;
+}
+
 bool SIM8xx::enableGprs(const char *apn, const char* user, const char *password)
 {
 	char gprsToken[5];
 	strcpy_P(gprsToken, TOKEN_GPRS);
 
 	return 
-		(sendAT(TO_F(TOKEN_CIPSHUT)), waitResponse(65000L, TO_F(TOKEN_SHUT_OK)) == 0) &&					//AT+CIPSHUT
+		(sendAT(TO_F(TOKEN_CIPSHUT)), waitResponse(75000L, TO_F(TOKEN_SHUT_OK)) == 0) &&					//AT+CIPSHUT
 		(sendFormatAT(TO_F(AT_COMMAND_GPRS_ATTACH), 1), waitResponse(10000L) == 0) &&						//AT+CGATT=1
 
 		(setBearerSetting(TO_F(AT_COMMAND_PARAMETER_BEARER_CONTYPE), gprsToken)) &&							//AT+SAPBR=3,1,"CONTYPE","GPRS"
@@ -57,7 +71,7 @@ bool SIM8xx::enableGprs(const char *apn, const char* user, const char *password)
 bool SIM8xx::disableGprs()
 {
 	return 
-		(sendFormatAT(TO_F(AT_COMMAND_SET_BEARER_SETTING), 0, 1), waitResponse(65000L) != -1) &&			//AT+SAPBR=0,1
+		//(sendFormatAT(TO_F(AT_COMMAND_SET_BEARER_SETTING), 0, 1), waitResponse(65000L) != -1) &&			//AT+SAPBR=0,1	<--si ya estaba conectado esto va a fallar y no va a ejecutar las dos líneas de abajo
 		(sendAT(TO_F(TOKEN_CIPSHUT)), waitResponse(65000L, TO_F(TOKEN_SHUT_OK)) == 0) &&					//AT+CIPSHUT
 		(sendFormatAT(TO_F(AT_COMMAND_GPRS_ATTACH), 0), waitResponse(10000L) == 0);							//AT+CGATT=0
 }

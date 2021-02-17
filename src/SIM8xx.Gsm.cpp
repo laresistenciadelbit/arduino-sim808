@@ -24,7 +24,7 @@ size_t SIM8xx::getSimState(char *state, size_t stateSize)
 		strlen(state) :
 		0;
 }
-
+/*
 size_t SIM8xx::getImei(char *imei, size_t imeiSize)
 {
 	//AT+GSN does not have a response prefix, so we need to flush input
@@ -88,3 +88,4 @@ bool SIM8xx::sendSms(const char *addr, const char *msg)
 	return waitResponse(60000L, TO_F(TOKEN_CMGS)) == 0 &&
 		waitResponse() == 0;
 }
+*/

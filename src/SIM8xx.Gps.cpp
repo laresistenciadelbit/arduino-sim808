@@ -70,9 +70,10 @@ SIM8xxGpsStatus SIM8xx::getGpsStatus(char * response, size_t responseSize, uint8
 			SIM8xxGpsStatus::AccurateFix :
 			SIM8xxGpsStatus::Fix;
 
-		copyCurrentLine(response, responseSize, shift);
+		//copyCurrentLine(response, responseSize, shift);
 	}
-
+	copyCurrentLine(response, responseSize, shift);//rellenamos el buffer de respuesta si o si para propósitos de debugging
+	
 	if(waitResponse() != 0) return SIM8xxGpsStatus::Fail;
 
 	return result;

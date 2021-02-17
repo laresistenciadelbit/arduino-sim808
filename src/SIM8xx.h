@@ -13,7 +13,7 @@ private:
 	uint8_t _resetPin;
 	uint8_t _statusPin;
 	uint8_t _pwrKeyPin;
-	const char* _userAgent;
+	const char* _userAgent={"Sim8xx"};
 
 	/**
 	 * Wait for the device to be ready to accept communcation.
@@ -119,23 +119,24 @@ public:
 	/**
 	 * Get the device IMEI number.
 	 */
-	size_t getImei(char* imei, size_t imeiSize);
+//	size_t getImei(char* imei, size_t imeiSize);
 
 	/**
 	 * Get current GSM signal quality, estimated attenuation in dB and error rate.
 	 */
-	SIM8xxSignalQualityReport getSignalQuality();
+//	SIM8xxSignalQualityReport getSignalQuality();
 
-	bool setSmsMessageFormat(SIM8xxSmsMessageFormat format);
+//	bool setSmsMessageFormat(SIM8xxSmsMessageFormat format);
 	/**
 	 * Send a SMS to the provided number.
 	 */
-	bool sendSms(const char* addr, const char* msg);
+//	bool sendSms(const char* addr, const char* msg);
 
 	/**
 	 * Get a boolean indicating wether or not GPRS is currently enabled.
 	 */
 	bool getGprsPowerState(bool *state);
+	bool getGprsPowerState();
 	/**
 	 * Reinitiliaze and enable GPRS.
 	 */

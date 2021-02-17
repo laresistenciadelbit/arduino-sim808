@@ -40,8 +40,10 @@ bool SIM8xx::powerOnOff(bool power)
 void SIM8xx::getInternalClock(char *clock_output)	// tomamos como referencia getImei() o getChargingState()
 {
 	sendAT(TO_F(TOKEN_CCLK));
-	waitResponse(TO_F(TOKEN_CCLK));
-	copyCurrentLine(clock_output, 20); //tamaño de cadena del reloj interno = 20 caracteres
+	waitResponse(2000,NULL);
+	waitResponse(2000,NULL);
+	copyCurrentLine(clock_output, 21, 8); //tamaño de cadena del reloj interno = 20 caracteres +1 , 8 de offset iniciales
+
 }
 
 SIM8xxChargingStatus SIM8xx::getChargingState()

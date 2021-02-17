@@ -4,7 +4,7 @@
 #include <ArduinoLog.h>
 #include "SIMComAT.Common.h"
 
-#define _SIM8xx_DEBUG 1
+#define _SIM8xx_DEBUG 0
 
 #if _SIM8xx_DEBUG
 	#define SIM8xx_PRINT(...) _debug.verbose(__VA_ARGS__)
@@ -29,7 +29,7 @@
 #endif
 
 #define BUFFER_SIZE 64
-#define SIMCOMAT_DEFAULT_TIMEOUT 1000
+#define SIMCOMAT_DEFAULT_TIMEOUT 3500
 
 class SIMComAT : public Stream
 {

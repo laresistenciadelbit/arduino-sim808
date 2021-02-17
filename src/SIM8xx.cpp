@@ -40,6 +40,12 @@ void SIM8xx::reset()
 	delay(200);
 
 	digitalWrite(_resetPin, HIGH);
+	
+	// añadido: https://github.com/blemasle/arduino-sim808/issues/10
+	digitalWrite(_pwrKeyPin, HIGH); //pwr off
+	delay(2500); //wait discharching capacitors
+	digitalWrite(_pwrKeyPin, LOW); //pwr on
+	delay(1000); //wait charching capacitors
 }
 
 void SIM8xx::waitForReady()
@@ -50,7 +56,7 @@ void SIM8xx::waitForReady()
 		SIM8xx_PRINT_SIMPLE_P("Waiting for echo...");
 		sendAT(S_F(""));
 	// Despite official documentation, we can get an "AT" back without a "RDY" first.
-	} while (waitResponse(TO_F(TOKEN_AT)) != 0);
+	} while (waitResponse(2000) != 0); // por defecto el tiempo de espera era -> TO_F(TOKEN_AT) <- muy corto , lo hemos aumentado tanto aquí como en SIMComAT.h -> constante SIMCOMAT_DEFAULT_TIMEOUT aumentada a 2000
 
 	// we got AT, waiting for RDY
 //	while (waitResponse(TO_F(TOKEN_RDY)) != 0);

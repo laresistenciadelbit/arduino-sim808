@@ -61,12 +61,25 @@ uint16_t SIM8xx::httpPost(const char *url, ATConstStr contentType, const char *b
 	uint16_t statusCode = 0;
 	size_t dataSize = 0;
 
-	bool result = setupHttpRequest(url) &&
+	/*bool result = setupHttpRequest(url) &&
 		setHttpParameter(TO_F(AT_COMMAND_PARAMETER_HTTP_CONTENT), contentType) &&
 		setHttpBody(body) &&
 		fireHttpRequest(SIM8xxHttpAction::Post, &statusCode, &dataSize) &&
 		readHttpResponse(response, responseSize, dataSize) &&
-		httpEnd();
+		httpEnd();*/
+
+	setupHttpRequest(url);
+	delay(500);
+	setHttpParameter(TO_F(AT_COMMAND_PARAMETER_HTTP_CONTENT), contentType);
+	delay(500);
+	setHttpBody(body);
+	delay(500);
+	fireHttpRequest(SIM8xxHttpAction::Post, &statusCode, &dataSize);
+	delay(500);
+	readHttpResponse(response, responseSize, dataSize);
+	delay(1500);
+	httpEnd();
+	delay(1500);
 
 	return statusCode;
 }
@@ -74,7 +87,8 @@ uint16_t SIM8xx::httpPost(const char *url, ATConstStr contentType, const char *b
 bool SIM8xx::setupHttpRequest(const char* url)
 {
 	httpEnd();
-
+	delay(1200);
+	
 	return httpInit() &&
 		setHttpParameter(TO_F(AT_COMMAND_PARAMETER_HTTP_REDIR), 1) &&
 		setHttpParameter(TO_F(AT_COMMAND_PARAMETER_HTTP_CID), 1) &&
